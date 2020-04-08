@@ -68,7 +68,8 @@ calc_c_frac <- function(x) {
     mutate(ndf_correction_factor_R =  ndf_weight_g / empty_bag_weight_g,
            adf_correction_factor_R = adf_weight_g / empty_bag_weight_g,
            adl_correction_factor_R = adl_weight_g / empty_bag_weight_g,
-           ashing_correction_factor_R = (crucible_ash_weight_g - empty_crucible_weight_g) / empty_bag_weight_g)
+           ash_weight_g_R = crucible_ash_weight_g - empty_crucible_weight_g,
+           ashing_correction_factor_R = ash_weight_g_R / empty_bag_weight_g)
     
     # Get average correction factors per batch
     corr_facts_avg <- corr_facts %>% 
@@ -89,7 +90,7 @@ calc_c_frac <- function(x) {
               soluble_perc_R = 100 - ndf_perc_R,
               hemicellulose_perc_R = ndf_perc_R - adf_perc_R,
               cellulose_perc_R = adf_perc_R - adl_perc_R,
-              recalcitrants_perc_R = ash_weight_g_R - (empty_bag_weight_g * corr_facts_avg$ashing_correction_factor_R) * 100 / sample_weight_g,
+              recalcitrants_perc_R = (ash_weight_g_R - (empty_bag_weight_g * corr_facts_avg$ashing_correction_factor_R)) * 100 / sample_weight_g,
               recalcitrants_perc_R = replace(recalcitrants_perc_R, recalcitrants_perc_R < 0, 0), # replace negative recalcitrants values by 0
               lignin_perc_R = adl_perc_R - recalcitrants_perc_R,
               sum_fractions_perc_R = soluble_perc_R + hemicellulose_perc_R + cellulose_perc_R + lignin_perc_R + recalcitrants_perc_R)
