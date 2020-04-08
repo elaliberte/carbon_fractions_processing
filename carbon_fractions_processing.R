@@ -100,7 +100,7 @@ calc_c_frac <- function(x) {
     
     # Select only relevant variables and order
     select(bag_id = fulcrum_id,
-           fulcrum_record_id,
+           fulcrum_parent_id,
            bag_number,
            sample_type,
            leaf_chemistry_sample,
@@ -164,7 +164,7 @@ batches_relev <- batches %>%
 
 # Merge the two data sets
 bags_all <- batches_relev %>% 
-  left_join(c_frac_all, by = c('batch_id' = 'fulcrum_record_id')) %>% 
+  left_join(c_frac_all, by = c('batch_id' = 'fulcrum_parent_id')) %>% 
   arrange(date_started,
           bag_number)
 
